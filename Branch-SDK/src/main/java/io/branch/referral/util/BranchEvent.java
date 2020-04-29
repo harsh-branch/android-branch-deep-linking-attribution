@@ -244,7 +244,7 @@ public class BranchEvent {
      * Logs this BranchEvent to Branch for tracking and analytics
      *
      * @param context Current context
-     * @return {@code true} if the event is logged to Branch
+     * @return {@code true} if the event is logged to Branch servers
      */
     public boolean logEvent(Context context) {
         boolean isReqQueued = false;
@@ -256,9 +256,26 @@ public class BranchEvent {
         return isReqQueued;
     }
 
+    /**
+     * Returns the payload to be fired to the Branch servers
+     * @param context Current Context
+     * @return payload object to be logged to Branch servers
+     */
+    public JSONObject getEventPayload(Context context){
+        JSONObject payload = new JSONObject();
+        payload = new ServerRequestLogEvent(context, "").getReqBody();
+        return payload;
+    }
+
     private class ServerRequestLogEvent extends ServerRequest {
         ServerRequestLogEvent(Context context, String requestPath) {
             super(context, requestPath);
+            JSONObject reqBody = new JSONObject();
+            reqBody = getReqBody();
+            updateEnvironment(context, reqBody);
+        }
+
+        public JSONObject getReqBody(){
             JSONObject reqBody = new JSONObject();
             try {
                 reqBody.put(Defines.Jsonkey.Name.getKey(), eventName);
@@ -287,7 +304,7 @@ public class BranchEvent {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            updateEnvironment(context, reqBody);
+            return reqBody;
         }
 
         @Override
