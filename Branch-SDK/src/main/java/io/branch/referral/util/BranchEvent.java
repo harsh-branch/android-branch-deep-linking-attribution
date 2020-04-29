@@ -256,6 +256,22 @@ public class BranchEvent {
         return isReqQueued;
     }
 
+    /**
+     * Logs this BranchEvent to client's servers for tracking and analytics
+     *
+     * @param context Current context
+     * @param reqPath Path to which the event needs to be logged
+     * @return {@code true} if the event is logged to requested path
+     */
+    public boolean logEvent(Context context, String reqPath) {
+        boolean isReqQueued = false;
+        if (Branch.getInstance() != null) {
+            Branch.getInstance().handleNewRequest(new ServerRequestLogEvent(context, reqPath));
+            isReqQueued = true;
+        }
+        return isReqQueued;
+    }
+
     private class ServerRequestLogEvent extends ServerRequest {
         ServerRequestLogEvent(Context context, String requestPath) {
             super(context, requestPath);
