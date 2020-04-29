@@ -263,12 +263,14 @@ public class BranchEvent {
      * @param reqPath Path to which the event needs to be logged
      * @return {@code true} if the event is logged to requested path
      */
-    public boolean logEvent(Context context, String reqPath) {
+    public boolean logEvent(Context context, String apiUrl) {
+        Branch.setAPIUrl(apiUrl);
         boolean isReqQueued = false;
         if (Branch.getInstance() != null) {
-            Branch.getInstance().handleNewRequest(new ServerRequestLogEvent(context, reqPath));
+            Branch.getInstance().handleNewRequest(new ServerRequestLogEvent(context, ""));
             isReqQueued = true;
         }
+        Branch.setAPIUrl(null);
         return isReqQueued;
     }
 
