@@ -260,7 +260,7 @@ public class BranchEvent {
      * Logs this BranchEvent to client's servers for tracking and analytics
      *
      * @param context Current context
-     * @param reqPath Path to which the event needs to be logged
+     * @param apiUrl Path to which the event needs to be logged
      * @return {@code true} if the event is logged to requested path
      */
     public boolean logEvent(Context context, String apiUrl) {
